@@ -1,9 +1,10 @@
 import VueCarousel from '../../package/VueCarousel.vue';
 
-const VueMobileUI = {};
 const ComponentsList = [ VueCarousel ];
+var VueMobileUI = {};
 VueMobileUI.install = function(Vue, options){
-	/*开启监听在初始化和窗口大小变化时响应rem单位的变化*/
+
+	//开启监听在初始化和窗口大小变化时响应rem单位的变化
 	Vue.startRemListener = function(multiple = 0.1){
 		function _init(){
 			let pageWidth = parseInt(document.body.clientWidth);
@@ -21,5 +22,6 @@ VueMobileUI.install = function(Vue, options){
 	Vue.startRemListener();
 
 }
+
 
 export default VueMobileUI;

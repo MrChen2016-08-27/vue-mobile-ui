@@ -1,4 +1,4 @@
-/******/ (function(modules) { // webpackBootstrap
+/******/ module.exports = (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -285,10 +285,11 @@ var _VueCarousel2 = _interopRequireDefault(_VueCarousel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var VueMobileUI = {};
 var ComponentsList = [_VueCarousel2.default];
+var VueMobileUI = {};
 VueMobileUI.install = function (Vue, options) {
-	/*开启监听在初始化和窗口大小变化时响应rem单位的变化*/
+
+	//开启监听在初始化和窗口大小变化时响应rem单位的变化
 	Vue.startRemListener = function () {
 		var multiple = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.1;
 
