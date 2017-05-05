@@ -37,7 +37,7 @@ vue-mobile-ui 只支持 单文件组件形式（webpack+vue-loader），需要�
 	Vue.use(VueTouch, {name: 'v-touch'});
 	Vue.use(VueMobileUI);
 
-###使用组件:
+### 使用组件:
 
 在你的 App.vue 文件(当然在其他vue文件中也可以)使用 vue-carousel 组件.
 
