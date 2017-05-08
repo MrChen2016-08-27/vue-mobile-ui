@@ -1,6 +1,7 @@
 import VueCarousel from '../../package/VueCarousel.vue';
+import VueRefresh from '../../package/VueRefresh.vue';
 
-const ComponentsList = [ VueCarousel ];
+const ComponentsList = [ VueCarousel, VueRefresh ];
 var VueMobileUI = {};
 VueMobileUI.install = function(Vue, options){
 
@@ -17,7 +18,7 @@ VueMobileUI.install = function(Vue, options){
 		_init();
 	};
 	ComponentsList.map((component) => {
-		Vue.component(component.name, VueCarousel);
+		Vue.component(component.name, component);
 	});
 	Vue.startRemListener();
 

@@ -63,22 +63,79 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+// this module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  scopeId,
+  cssModules
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  // inject cssModules
+  if (cssModules) {
+    var computed = Object.create(options.computed || null)
+    Object.keys(cssModules).forEach(function (key) {
+      var module = cssModules[key]
+      computed[key] = function () { return module }
+    })
+    options.computed = computed
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(7)
+__webpack_require__(10)
 
-var Component = __webpack_require__(5)(
+var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(1),
+  __webpack_require__(3),
   /* template */
-  __webpack_require__(6),
+  __webpack_require__(9),
   /* scopeId */
   "data-v-a8ae54f0",
   /* cssModules */
@@ -105,7 +162,41 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 1 */
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(4),
+  /* template */
+  __webpack_require__(8),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "E:\\github-project\\vue-mobile-ui\\package\\VueRefresh.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] VueRefresh.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0c67073a", Component.options)
+  } else {
+    hotAPI.reload("data-v-0c67073a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -269,7 +360,60 @@ exports.default = {
 };
 
 /***/ }),
-/* 2 */
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+	name: 'VueRefresh',
+	data: function data() {
+		return {
+			/*oepn用于避免频繁触发*/
+			open: false
+		};
+	},
+
+	props: {
+		tag: {
+			type: String
+		},
+		/*触发需要的距离*/
+		distance: {
+			type: Number,
+			default: 160
+		}
+	},
+	methods: {
+		downRefresh: function downRefresh(ev) {
+			var _this = this;
+
+			var obj = this.$el;
+			obj.addEventListener('touchstart', function () {
+				_this.open = true;
+			});
+			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			if (scrollTop <= 0 && ev.deltaY >= this.distance && this.open === true) {
+				this.open = false;
+				this.$emit('downRefresh');
+			}
+		}
+	}
+};
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -279,13 +423,17 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _VueCarousel = __webpack_require__(0);
+var _VueCarousel = __webpack_require__(1);
 
 var _VueCarousel2 = _interopRequireDefault(_VueCarousel);
 
+var _VueRefresh = __webpack_require__(2);
+
+var _VueRefresh2 = _interopRequireDefault(_VueRefresh);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ComponentsList = [_VueCarousel2.default];
+var ComponentsList = [_VueCarousel2.default, _VueRefresh2.default];
 var VueMobileUI = {};
 VueMobileUI.install = function (Vue, options) {
 
@@ -304,7 +452,7 @@ VueMobileUI.install = function (Vue, options) {
 		_init();
 	};
 	ComponentsList.map(function (component) {
-		Vue.component(component.name, _VueCarousel2.default);
+		Vue.component(component.name, component);
 	});
 	Vue.startRemListener();
 };
@@ -312,10 +460,10 @@ VueMobileUI.install = function (Vue, options) {
 exports.default = VueMobileUI;
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)();
+exports = module.exports = __webpack_require__(7)();
 // imports
 
 
@@ -326,7 +474,7 @@ exports.push([module.i, "\n.carouse[data-v-a8ae54f0] {\n  width: 100%;\n  positi
 
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -382,64 +530,29 @@ module.exports = function() {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// this module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  scopeId,
-  cssModules
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  // inject cssModules
-  if (cssModules) {
-    var computed = Object.create(options.computed || null)
-    Object.keys(cssModules).forEach(function (key) {
-      var module = cssModules[key]
-      computed[key] = function () { return module }
-    })
-    options.computed = computed
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-touch', {
+    attrs: {
+      "tag": _vm.tag
+    },
+    on: {
+      "pandown": _vm.downRefresh
+    }
+  }, [_vm._t("default")], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-0c67073a", module.exports)
   }
 }
 
-
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -503,17 +616,17 @@ if (false) {
 }
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(6);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("b03521d8", content, false);
+var update = __webpack_require__(11)("b03521d8", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -529,7 +642,7 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -548,7 +661,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(9)
+var listToStyles = __webpack_require__(12)
 
 /*
 type StyleObject = {
@@ -750,7 +863,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
