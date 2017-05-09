@@ -137,10 +137,15 @@
 					oImg = el.querySelector('.img-active');
 					el.style.height = oImg.offsetHeight + 'px';
 				}
+				loadSize();
 				//避免初始化前获取了图片高度为0
-				oImg.addEventListener('load', function(){
-					loadSize();
-				});
+				let timer = setInterval(() => {
+					if(el.offsetHeight <= 0){
+						loadSize();
+					}else{
+						clearInterval(timer);
+					}
+				},200);
 				//当容器大小改变则重新计算
 				window.addEventListener('resize', function(){
 					loadSize();
