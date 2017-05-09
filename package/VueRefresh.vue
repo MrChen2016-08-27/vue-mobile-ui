@@ -1,5 +1,5 @@
 <template>
-	<v-touch v-on:pandown="downRefresh" :tag=tag >
+	<v-touch :options="{ touchAction: 'auto' }" :pan-options="{ direction: 'down', threshold: distance }" v-on:panend="downRefresh" :tag=tag >
 		<slot></slot>
 	</v-touch>
 </template>
@@ -9,8 +9,6 @@
 		name: 'VueRefresh',
 		data (){
 			return {
-			    /*oepn用于避免频繁触发*/
-				open: false
 			}
 		},
 		props:{
@@ -25,14 +23,9 @@
 		},
 		methods: {
 			downRefresh (ev){
-				let obj = this.$el;
-				obj.addEventListener('touchstart', () => {
-					this.open = true;
-				});
 				let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-				if(scrollTop <= 0 && ev.deltaY >= this.distance && this.open === true){
-						this.open = false;
-						this.$emit('downRefresh');
+				if( scrollTop <= 0 ){
+					this.$emit('downRefresh');
 				}
 
 

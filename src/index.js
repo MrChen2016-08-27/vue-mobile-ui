@@ -379,10 +379,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
 	name: 'VueRefresh',
 	data: function data() {
-		return {
-			/*oepn用于避免频繁触发*/
-			open: false
-		};
+		return {};
 	},
 
 	props: {
@@ -397,15 +394,8 @@ exports.default = {
 	},
 	methods: {
 		downRefresh: function downRefresh(ev) {
-			var _this = this;
-
-			var obj = this.$el;
-			obj.addEventListener('touchstart', function () {
-				_this.open = true;
-			});
 			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-			if (scrollTop <= 0 && ev.deltaY >= this.distance && this.open === true) {
-				this.open = false;
+			if (scrollTop <= 0) {
 				this.$emit('downRefresh');
 			}
 		}
@@ -536,10 +526,17 @@ module.exports = function() {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('v-touch', {
     attrs: {
+      "options": {
+        touchAction: 'auto'
+      },
+      "pan-options": {
+        direction: 'down',
+        threshold: _vm.distance
+      },
       "tag": _vm.tag
     },
     on: {
-      "pandown": _vm.downRefresh
+      "panend": _vm.downRefresh
     }
   }, [_vm._t("default")], 2)
 },staticRenderFns: []}
