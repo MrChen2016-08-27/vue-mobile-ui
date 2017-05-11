@@ -1,7 +1,7 @@
 ## vue-mobile-ui ##
 #### 面向移动端的组件 ####
 
-只支持 Vue2.0 版本
+支持vue版本: Vue2.x 版本
 
 vue-mobile-ui 只支持 单文件组件形式（webpack+vue-loader），需要的依赖:
 
@@ -36,6 +36,16 @@ vue-mobile-ui 只支持 单文件组件形式（webpack+vue-loader），需要�
 	
 	Vue.use(VueTouch, {name: 'v-touch'});
 	Vue.use(VueMobileUI);
+
+### 全局方法
+
+* Vue.startRemListener(val);
+
+	开始对rem的自动监听，接收一个小数的参数，
+	1rem = 窗口宽度*val，
+	val默认为0.1,在窗口大小改变时同样会对rem进行响应,
+	该方法默认被使用，当然如果你不满足rem 和 窗口宽度的比例，也可以再次设置,vue-mobile-ui 部分组件基于rem 来适配移动端
+
 
 ### 使用组件:
 
@@ -127,6 +137,20 @@ vue-carousel 组件接受三个参数:
 	
 	下拉刷新事件，使用 v-on 监听事件在回调函数使用ajax来请求数据，即可实现下拉刷新
 
+### 全局指令
 
+  * v-scroll-load
+	
+	滚动加载指令，当该指令作用与一个容器时，当页面滚动到容器底部可看见时，该指令将会执行接收回调函数( 你可以在回调里进行ajax请求数据的操作 )，你也可以在刷新组件上添加该指令，让该容器同时具有下拉刷新以及滚动加载
+	
+	举例:
+	
+		<vue-refresh v-scroll-load="addData" v-on:downRefresh="loadData"  tag="div"   >
+			
+		</vue-refresh>	  
+
+  > addData 函数里使用了ajax 请求数据后将数据添加到data中的数组末尾
+
+  > loadData 函数使用ajax 请求数据后将数据直接赋值给了data中的数组
 		
 	 

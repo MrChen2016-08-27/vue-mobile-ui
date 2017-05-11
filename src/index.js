@@ -446,6 +446,25 @@ VueMobileUI.install = function (Vue, options) {
 		});
 		_init();
 	};
+
+	//全局指令
+	Vue.directive('scroll-load', {
+		bind: function bind(el, binding) {
+			var callback = binding.value;
+			window.addEventListener('scroll', function () {
+				var objTop = el.offsetTop;
+				var objHeight = el.offsetHeight;
+				var bodyHeight = document.documentElement.clientHeight || document.body.clientHeight;
+				var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+				var distance = objTop + objHeight - parseInt(bodyHeight);
+				if (scrollTop >= distance && typeof callback === 'function') {
+					callback();
+				}
+			});
+		}
+	});
+
+	//全局组件
 	ComponentsList.map(function (component) {
 		Vue.component(component.name, component);
 	});
