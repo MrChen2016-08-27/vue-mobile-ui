@@ -1,8 +1,8 @@
 var webpack = require("webpack");
 module.exports = {
-	entry: './src/entry/index.js',
+	entry: './src/index.js',
 	output: {
-		filename: './src/index.js'
+		filename: './index.js'
 	},
 	module: {
 		loaders: [
